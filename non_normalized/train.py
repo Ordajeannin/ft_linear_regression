@@ -5,8 +5,8 @@ DATASET_PATH = "../data.csv"
 THETAS_PATH = "files/thetas.json"
 
 LEARNING_RATE = 0.0000000001
-ITERATIONS = 100
-#ITERATIONS = 500000
+#ITERATIONS = 100
+ITERATIONS = 500000
 
 
 def load_data(path):
@@ -56,7 +56,12 @@ def compute_r2_score(mileages, prices, theta0, theta1):
         return 1.0
     return 1 - (ss_res / ss_total)
 
-
+#les valeurs sont tellement enormes que, non normalisee, ca donne n importe quoi
+# a la premiere iterations :
+# error = prediction - price = 0 - price
+# -> erreur negatives
+# sum_error_mileage += error * mileage = negatif
+# theta1 -= negatif, donc theta1 devient positif -> ax + b avec a positif
 def train(mileages, prices, learning_rate, iterations):
     theta0 = 0.0
     theta1 = 0.0
