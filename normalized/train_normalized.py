@@ -7,7 +7,7 @@ THETAS_PATH = "files/thetas_normalized.json"
 LEARNING_RATE = 0.01
 ITERATIONS = 1000
 
-
+#lis le csv en sautant la premiere ligne pour eviter d interpreter mileages et prices
 def load_data(path):
     mileages = []
     prices = []
@@ -24,16 +24,16 @@ def load_data(path):
 
     return mileages, prices
 
-
+#besoin de commenter?
 def mean(values):
     return sum(values) / len(values)
 
-
+#calcul de l'ecart-type
 def std(values, avg):
     variance = sum((x - avg) ** 2 for x in values) / len(values)
     return variance ** 0.5
 
-
+#normalisation standard des donnees, mean = 0 et std = 1
 def normalize(values):
     avg = mean(values)
     deviation = std(values, avg)
@@ -44,11 +44,11 @@ def normalize(values):
     normalized = [(x - avg) / deviation for x in values]
     return normalized, avg, deviation
 
-
+#tentative de l algo d'estimer un prix
 def estimate_price(mileage, theta0, theta1):
     return theta0 + theta1 * mileage
 
-
+# J(θ0​,θ1​)=1/2m​∑(prediction−reel)^2
 def compute_cost(mileages, prices, theta0, theta1):
     m = len(mileages)
     total = 0.0
@@ -60,7 +60,12 @@ def compute_cost(mileages, prices, theta0, theta1):
 
     return total / (2 * m)
 
-
+#coef de determination, comparaison du model avec un naif "prix moyen"
+# - ss_total = somme des carres total, niveau de desordre naturel
+#              "tout ce qu il y a a expliquer"
+# - ss_res = somme des carres residuel, erreur restante apres le modele
+#            "ce que je n explique pas"
+# part expliquee, R^2 = 1 - (ss_res / ss_total)
 def compute_r2_score(mileages, prices, theta0, theta1):
     mean_price = sum(prices) / len(prices)
     ss_total = 0.0
